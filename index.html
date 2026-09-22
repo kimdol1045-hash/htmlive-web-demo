@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>상품 목록 · 작은상점</title>
+<style>
+:root{--product-canvas:#f5f6f8;--product-surface:#fff;--product-text:#232c39;--product-muted:#536174;--product-border:#d3d9e1;--product-accent:#244bc2;--product-danger:#ad2637;--product-focus:#315bd4;--product-radius:8px;--product-space:16px;font:16px/1.55 system-ui,-apple-system,sans-serif;color:var(--product-text);background:var(--product-canvas)}
+*{box-sizing:border-box}body{margin:0}a{color:var(--product-accent)}button,input,select,textarea{font:inherit}button,.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:8px 16px;border:1px solid var(--product-border);border-radius:6px;background:var(--product-surface);color:var(--product-text);cursor:pointer;text-decoration:none;white-space:nowrap}button:hover,.button:hover{filter:brightness(.96)}button:disabled{opacity:.5;cursor:not-allowed}.primary{background:var(--product-accent);border-color:var(--product-accent);color:white}.danger{background:var(--product-danger);border-color:var(--product-danger);color:white}.quiet{background:transparent}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--product-focus);outline-offset:3px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px max(24px,calc((100vw - 1120px)/2));background:var(--product-surface);border-bottom:1px solid var(--product-border)}.brand{color:var(--product-text);font-weight:750;text-decoration:none}.brand small{display:block;font-size:12px;font-weight:400;color:var(--product-muted)}main{max-width:1168px;margin:40px auto;padding:0 24px}.form-page{max-width:850px}.heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:26px}h1{font-size:28px;letter-spacing:-1px;margin:4px 0}h2{font-size:18px;margin:0}p{margin:8px 0}.eyebrow{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--product-muted)}.muted,small{color:var(--product-muted)}.panel{padding:24px;background:var(--product-surface);border:1px solid var(--product-border);border-radius:var(--product-radius);margin-bottom:20px}.search-row{display:flex;gap:12px;align-items:center}.search-row input{flex:1;min-width:60px}input,select,textarea{width:100%;min-height:42px;border:1px solid var(--product-border);border-radius:6px;background:white;padding:9px 12px;color:var(--product-text)}textarea{resize:vertical}.table-heading{display:flex;justify-content:space-between;gap:16px;margin-bottom:20px;font-size:13px}.table-heading h2 span{font-size:14px;color:var(--product-accent);margin-left:8px}.table-scroll{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap;text-align:left}th{font-size:12px;color:var(--product-muted);font-weight:500;background:var(--product-canvas)}th,td{padding:14px 12px;border-bottom:1px solid var(--product-border)}td{font-size:14px}.badge{display:inline-block;padding:4px 9px;border-radius:4px;background:#edf3ff;color:#2049a7;font-size:12px}.badge.stopped{background:#f3eaed;color:#8b273b}.empty{text-align:center;padding:40px 0;color:var(--product-muted)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.field label{font-size:14px;font-weight:600}.field small{font-size:12px}.wide{grid-column:1/-1}.unit-input{display:flex;align-items:center;gap:10px}.field-error{color:var(--product-danger);font-size:13px;margin:0}[aria-invalid=true]{border-color:var(--product-danger);background:#fff7f8}.form-actions,.dialog-actions{display:flex;justify-content:flex-end;gap:12px;padding-top:24px;margin-top:24px;border-top:1px solid var(--product-border)}.success{color:#176a42}.product-info{display:grid;grid-template-columns:100px 1fr;gap:18px}.product-info dt{color:var(--product-muted)}.product-info dd{margin:0;overflow-wrap:anywhere;white-space:pre-line}dialog{width:min(480px,calc(100vw - 32px));padding:28px;border:1px solid var(--product-border);border-radius:10px;background:var(--product-surface);color:var(--product-text)}dialog::backdrop{background:#15203580}dialog p{color:var(--product-muted);margin-top:12px}[hidden]{display:none!important}
+@media(max-width:640px){.topbar{padding:16px;gap:12px}.topbar button{font-size:12px;padding:8px}main{margin-top:24px;padding:0 16px}.heading{align-items:flex-start;flex-wrap:wrap}h1{font-size:25px}.panel{padding:18px}.search-row{flex-wrap:wrap}.search-row label{width:100%}.search-row input{flex-basis:100%}.form-grid{grid-template-columns:1fr;gap:20px}.wide{grid-column:auto}.table-heading{flex-direction:column;gap:6px}.product-info{grid-template-columns:80px 1fr}.form-actions button{flex:1}}
+
+.filters,.pagination,.qa-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px}.filters button[aria-pressed=true]{background:var(--product-accent);color:white}.pagination{justify-content:flex-end}.demo-note{padding:8px 24px;background:#edf3ff;font-size:13px}.qa-panel{max-width:1120px;margin:12px auto;padding:0 24px}.qa-panel summary{cursor:pointer;color:var(--product-muted)}.qa-controls{font-size:13px}.qa-controls button{font-size:13px}.stock-editor{margin-top:24px;border-top:1px solid var(--product-border);padding-top:20px}.stock-row{display:flex;gap:12px;margin-top:12px}.stock-row input{max-width:180px}[aria-busy=true]{opacity:.75}@media(max-width:640px){.stock-row{flex-wrap:wrap}.filters button{font-size:13px}.pagination{justify-content:center}.demo-note{padding:8px 16px}}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="#list">작은상점 <small>상품관리 · 웹 테스트 예시</small></a><button id="reset-demo" class="quiet" type="button">예시 데이터 초기화</button><a id="back-to-list" href="#list" hidden>상품 목록</a></header>
+<p class="demo-note">가상 상품을 사용하는 테스트용 사이트입니다. 데이터는 현재 브라우저에만 저장되며 실제 주문·결제·서버 저장은 하지 않습니다.</p>
+<details class="qa-panel"><summary id="qa-options">테스트 조건</summary><div class="qa-controls"><button id="qa-delay" aria-pressed="false">느린 저장: 끔</button><button id="qa-fail-next" aria-pressed="false">다음 저장 실패</button><span id="qa-status" role="status">정상 저장</span></div></details>
+<main id="screen-list" data-screen-id="S-LIST"><div class="heading"><div><p class="eyebrow">CATALOG / PRODUCTS</p><h1 tabindex="-1">상품 목록</h1><p class="muted">판매할 상품과 재고를 관리합니다.</p></div><a class="button primary" href="#create" id="new-product" data-feature-id="F-OPEN-CREATE">상품 등록</a></div>
+<section class="panel" aria-label="상품 검색"><form id="search-form" class="search-row"><label for="product-query">상품명 검색</label><input id="product-query" data-testid="product-query" data-feature-id="F-SEARCH" type="search" placeholder="예: 머그" autocomplete="off"><button type="submit" id="search-submit">검색</button><button type="button" id="clear-search" class="quiet">초기화</button></form><div class="filters" role="group" aria-label="상품 필터"><button id="filter-all" data-feature-id="F-FILTER" aria-pressed="true">전체</button><button id="filter-active" data-feature-id="F-FILTER" aria-pressed="false">판매 중</button><button id="filter-archived" data-feature-id="F-FILTER" aria-pressed="false">판매 중지</button><button id="filter-low" data-feature-id="F-FILTER" aria-pressed="false">재고 5개 이하</button><button id="sort-price" data-feature-id="F-SORT" aria-pressed="false">가격 낮은 순</button></div></section>
+<section class="panel"><div class="table-heading"><h2>등록 상품 <span id="product-count">0</span></h2><span class="muted">상세를 열어 판매 상태를 변경하세요.</span></div><div class="table-scroll"><table><thead><tr><th>상품</th><th>상품 코드</th><th>판매가</th><th>재고</th><th>상태</th><th>관리</th></tr></thead><tbody id="product-rows"></tbody></table></div><nav class="pagination" aria-label="상품 페이지"><button id="page-prev" data-feature-id="F-PAGE">이전</button><span id="page-number" role="status"></span><button id="page-next" data-feature-id="F-PAGE">다음</button></nav><p id="empty-products" hidden class="empty" role="status">검색 결과가 없습니다.</p></section><p id="page-status" class="success" role="status"></p></main>
+<main id="screen-create" data-screen-id="S-CREATE" hidden class="form-page"><div class="heading"><div><p class="eyebrow">CATALOG / NEW PRODUCT</p><h1 tabindex="-1">상품 등록</h1><p class="muted">별표가 있는 항목은 필수입니다.</p></div></div>
+<form id="product-form" class="panel" novalidate><div class="form-grid">
+<div class="field wide"><label for="product-name">상품명 *</label><input id="product-name" data-testid="product-name" data-feature-id="F-CREATE" aria-describedby="product-name-error" maxlength="50" autocomplete="off"><small>2~50자. 앞뒤 공백은 저장할 때 제거합니다.</small><p class="field-error" id="product-name-error" hidden></p></div>
+<div class="field"><label for="product-sku">상품 코드 *</label><input id="product-sku" data-testid="product-sku" aria-describedby="product-sku-error" placeholder="예: NOTE-003" autocomplete="off"><small>영문 대문자·숫자·하이픈 3~20자</small><p class="field-error" id="product-sku-error" hidden></p></div>
+<div class="field"><label for="product-category">분류</label><select id="product-category"><option>문구</option><option>생활</option><option>식품</option></select></div>
+<div class="field"><label for="product-price">판매가 *</label><div class="unit-input"><input id="product-price" data-testid="product-price" inputmode="numeric" aria-describedby="product-price-error"><span>원</span></div><small>100원 이상의 정수</small><p class="field-error" id="product-price-error" hidden></p></div>
+<div class="field"><label for="product-stock">재고 *</label><div class="unit-input"><input id="product-stock" data-testid="product-stock" inputmode="numeric" value="0" aria-describedby="product-stock-error"><span>개</span></div><small>0~9,999의 정수</small><p class="field-error" id="product-stock-error" hidden></p></div>
+<div class="field wide"><label for="product-note">운영 메모</label><textarea id="product-note" rows="3" maxlength="300" placeholder="내부 확인용 메모"></textarea></div></div>
+<footer class="form-actions"><button type="button" id="cancel-create" data-feature-id="F-CANCEL" class="quiet">취소</button><button type="submit" class="primary" id="save-product" data-testid="save-product" data-feature-id="F-CREATE">상품 저장</button></footer><p id="form-status" class="field-error" role="alert" hidden></p></form></main>
+<main id="screen-detail" data-screen-id="S-DETAIL" hidden class="form-page"><div class="heading"><div><p class="eyebrow">CATALOG / PRODUCT DETAIL</p><h1 tabindex="-1" id="detail-name">상품 상세</h1><p id="detail-sku" class="muted"></p></div><span id="detail-state" class="badge">판매 중</span></div>
+<section class="panel" aria-label="상품 정보"><dl class="product-info"><dt>분류</dt><dd id="detail-category"></dd><dt>판매가</dt><dd id="detail-price"></dd><dt>재고</dt><dd id="detail-stock"></dd><dt>운영 메모</dt><dd id="detail-note"></dd></dl><div class="form-actions"><a class="button" href="#list">목록으로</a><button class="danger" id="archive-product" data-testid="archive-product" data-feature-id="F-ARCHIVE">판매 중지</button></div><form id="stock-form" class="stock-editor" novalidate><label for="stock-value">변경할 재고</label><div class="stock-row"><input id="stock-value" data-feature-id="F-STOCK" inputmode="numeric" aria-describedby="stock-value-error"><button id="save-stock" data-feature-id="F-STOCK" class="primary">재고 저장</button></div><p id="stock-value-error" class="field-error" hidden></p></form><button id="resume-product" data-feature-id="F-RESUME" hidden>판매 재개</button><p id="detail-message" class="success" role="status"></p></section></main>
+<dialog id="discard-dialog" aria-labelledby="discard-title"><h2 id="discard-title">입력한 내용을 버릴까요?</h2><p>저장하지 않은 상품 정보가 사라집니다.</p><div class="dialog-actions"><button id="continue-edit" autofocus>계속 작성</button><button class="danger" id="discard-create">버리고 나가기</button></div></dialog>
+<dialog id="archive-dialog" aria-labelledby="archive-title"><h2 id="archive-title">이 상품의 판매를 중지할까요?</h2><p>상품과 재고는 남고 판매 상태만 변경됩니다.</p><p id="archive-error" class="field-error" role="alert" hidden></p><div class="dialog-actions"><button id="cancel-archive" autofocus>취소</button><button class="danger" id="confirm-archive" data-feature-id="F-ARCHIVE">판매 중지 확정</button></div></dialog>
+<script>
+
+'use strict';
+const key='htmlive-catalog-web-v2';
+const initial=[{id:'P-001',name:'데일리 노트',sku:'NOTE-001',category:'문구',price:3500,stock:24,note:'A5 크기',status:'active'},{id:'P-002',name:'화이트 머그',sku:'MUG-002',category:'생활',price:12000,stock:8,note:'350ml',status:'active'}];
+initial.push({id:'P-003',name:'스테인리스 텀블러',sku:'CUP-003',category:'생활',price:18000,stock:3,note:'500ml',status:'active'},{id:'P-004',name:'오트 쿠키',sku:'FOOD-004',category:'식품',price:4500,stock:0,note:'가상 식품',status:'archived'},{id:'P-005',name:'검정 볼펜',sku:'PEN-005',category:'문구',price:1500,stock:5,note:'0.5mm',status:'active'},{id:'P-006',name:'리넨 파우치',sku:'BAG-006',category:'생활',price:9000,stock:12,note:'가상 상품',status:'archived'});
+const $=id=>document.getElementById(id),money=n=>Number(n).toLocaleString('ko-KR')+'원';
+let current='',dirty=false,pendingRoute='#list',detailId='',savedNotice='',filter='all',page=1,sortPrice=false,slow=false,failNext=false,saving=false;
+const pageSize=3;
+function load(){try{const data=JSON.parse(localStorage.getItem(key));return Array.isArray(data)?data:structuredClone(initial);}catch{return structuredClone(initial);}}
+function save(items){localStorage.setItem(key,JSON.stringify(items));}
+function text(tag,value){const node=document.createElement(tag);node.textContent=value;return node;}
+function list(){
+ const query=$('product-query').value.trim().toLowerCase();let filtered=load().filter(p=>p.name.toLowerCase().includes(query)).filter(p=>filter==='all'||filter==='low'&&p.stock<=5||p.status===filter);
+ if(sortPrice)filtered.sort((a,b)=>a.price-b.price||a.sku.localeCompare(b.sku));
+ const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);const items=filtered.slice((page-1)*pageSize,page*pageSize);
+ $('page-number').textContent=page+' / '+pages+' 페이지';$('page-prev').disabled=page===1;$('page-next').disabled=page===pages;
+ for(const name of ['all','active','archived','low'])$('filter-'+name).setAttribute('aria-pressed',String(name===filter));
+ $('product-rows').replaceChildren();$('product-count').textContent=filtered.length;$('empty-products').hidden=items.length>0;
+ for(const item of items){
+  const row=document.createElement('tr');for(const value of [item.name,item.sku,money(item.price),item.stock+'개'])row.append(text('td',value));
+  const badge=text('span',item.status==='active'?'판매 중':'판매 중지');badge.className='badge'+(item.status==='active'?'':' stopped');const cell=document.createElement('td');cell.append(badge);row.append(cell);
+  const link=text('a','상세 보기');link.href='#detail/'+encodeURIComponent(item.id);link.id='detail-'+item.id;link.dataset.featureId='F-DETAIL';link.setAttribute('aria-label',item.name+' 상세 보기');const action=document.createElement('td');action.append(link);row.append(action);$('product-rows').append(row);
+ }
+}
+function detail(){
+ const item=load().find(p=>p.id===detailId);$('detail-message').textContent='';
+ $('detail-name').textContent=item?item.name:'상품을 찾을 수 없습니다.';
+ for(const field of ['sku','category','price','stock','note'])$('detail-'+field).textContent=item?(field==='price'?money(item.price):field==='stock'?item.stock+'개':item[field]||'메모 없음'):'';
+ $('detail-state').hidden=!item;$('detail-state').textContent=item?.status==='active'?'판매 중':'판매 중지';$('detail-state').className='badge'+(item?.status==='active'?'':' stopped');$('archive-product').disabled=!item||item.status!=='active';$('resume-product').hidden=!item||item.status!=='archived';$('stock-form').hidden=!item;$('stock-value').value=item?.stock??'';invalid('stock-value','');
+}
+function invalid(id,message){const input=$(id),error=$(id+'-error');input.setAttribute('aria-invalid',message?'true':'false');error.textContent=message;error.hidden=!message;return !!message;}
+function clearForm(){
+ $('product-form').reset();dirty=false;$('form-status').hidden=true;
+ for(const id of ['product-name','product-sku','product-price','product-stock'])invalid(id,'');
+}
+function show(){
+ const hash=location.hash||'#list',next=hash==='#create'?'create':hash.startsWith('#detail/')?'detail':'list';
+ if(current==='#create'&&hash!==current&&dirty){pendingRoute=hash;history.replaceState(null,'',current);if(!$('discard-dialog').open)$('discard-dialog').showModal();return;}
+ for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();
+ for(const name of ['list','create','detail'])$('screen-'+name).hidden=name!==next;
+ $('reset-demo').hidden=next!=='list';$('back-to-list').hidden=next==='list';
+ if(next==='list'){$('product-query').value='';filter='all';page=1;list();$('page-status').textContent=savedNotice;savedNotice='';}
+ if(next==='create'&&current!=='#create')clearForm();
+ if(next==='detail'){try{detailId=decodeURIComponent(hash.slice(8));}catch{detailId='';}detail();}
+ current=hash;document.title={list:'상품 목록',create:'상품 등록',detail:'상품 상세'}[next]+' · 작은상점';
+ requestAnimationFrame(()=>{if(next==='create')$('product-name').focus();else $('screen-'+next).querySelector('h1').focus();});
+}
+function navigate(hash){
+ if(saving)return;
+ if(current==='#create'&&dirty&&hash!==current){pendingRoute=hash;$('discard-dialog').showModal();return;}
+ if(location.hash===hash)show();else location.hash=hash;
+}
+document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(link&&!event.defaultPrevented&&!event.metaKey&&!event.ctrlKey){event.preventDefault();navigate(link.getAttribute('href'));}});
+window.addEventListener('hashchange',show);
+$('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;list();});
+$('clear-search').addEventListener('click',()=>{$('product-query').value='';filter='all';page=1;list();$('product-query').focus();});
+$('reset-demo').addEventListener('click',()=>{try{save(structuredClone(initial));sortPrice=false;slow=false;failNext=false;updateScenario();$('sort-price').setAttribute('aria-pressed','false');$('product-query').value='';filter='all';page=1;list();$('page-status').textContent='예시 데이터를 초기화했습니다.';}catch{$('page-status').textContent='초기화할 수 없습니다. 브라우저의 저장소 설정을 확인하세요.';}});
+$('product-form').addEventListener('input',()=>{dirty=true;});
+$('product-form').addEventListener('change',()=>{dirty=true;});
+$('product-form').addEventListener('submit',async event=>{
+ event.preventDefault();if(saving)return;$('form-status').hidden=true;
+ const name=$('product-name').value.trim(),sku=$('product-sku').value.trim(),price=$('product-price').value.trim(),stock=$('product-stock').value.trim(),items=load();let failed=false;
+ failed=invalid('product-name',name.length<2||name.length>50?'상품명은 2~50자로 입력하세요.':'')||failed;
+ failed=invalid('product-sku',!/^[A-Z0-9-]{3,20}$/.test(sku)?'상품 코드는 영문 대문자·숫자·하이픈 3~20자로 입력하세요.':items.some(p=>p.sku===sku)?'이미 사용 중인 상품 코드입니다.':'')||failed;
+ failed=invalid('product-price',!/^\d+$/.test(price)||Number(price)<100||!Number.isSafeInteger(Number(price))?'판매가는 100원 이상의 정수로 입력하세요.':'')||failed;
+ failed=invalid('product-stock',!/^\d+$/.test(stock)||Number(stock)>9999?'재고는 0~9,999의 정수로 입력하세요.':'')||failed;
+ if(failed){$('product-form').querySelector('[aria-invalid=true]').focus();return;}
+ const item={id:'P-'+crypto.randomUUID(),name,sku,category:$('product-category').value,price:Number(price),stock:Number(stock),note:$('product-note').value.trim().slice(0,300),status:'active'};
+ setBusy('product-form',true);$('save-product').textContent='저장 중…';
+ try{await persist([...items,item]);dirty=false;savedNotice='상품을 저장했습니다.';setBusy('product-form',false);navigate('#list');}
+ catch(error){$('form-status').textContent=error.message;$('form-status').hidden=false;}
+ finally{setBusy('product-form',false);$('save-product').textContent='상품 저장';}
+});
+$('cancel-create').addEventListener('click',()=>navigate('#list'));
+$('continue-edit').addEventListener('click',()=>$('discard-dialog').close());
+$('discard-create').addEventListener('click',()=>{dirty=false;$('discard-dialog').close();navigate(pendingRoute);});
+$('archive-product').addEventListener('click',()=>{$('archive-error').hidden=true;$('archive-dialog').showModal();});
+$('cancel-archive').addEventListener('click',()=>$('archive-dialog').close());
+$('confirm-archive').addEventListener('click',async()=>{
+ if(saving)return;const items=load(),item=items.find(p=>p.id===detailId);if(!item||item.status!=='active')return;
+ item.status='archived';setBusy('archive-dialog',true);
+ try{await persist(items);$('archive-dialog').close();detail();$('detail-message').textContent='판매를 중지했습니다. 상품과 재고는 유지됩니다.';}
+ catch(error){$('archive-error').textContent=error.message;$('archive-error').hidden=false;}
+ finally{setBusy('archive-dialog',false);}
+});
+function setBusy(id,value){saving=value;$(id).setAttribute('aria-busy',String(value));for(const el of $(id).querySelectorAll('button,input,select,textarea'))el.disabled=value;}
+async function persist(items){
+ await new Promise(resolve=>setTimeout(resolve,slow?900:80));
+ if(failNext){failNext=false;updateScenario();throw new Error('테스트 조건에 따라 저장에 실패했습니다. 입력은 유지됩니다. 다시 저장하세요.');}
+ try{save(items);}catch{throw new Error('브라우저 저장소에 저장하지 못했습니다. 설정을 확인하고 다시 시도하세요.');}
+}
+function updateScenario(){$('qa-delay').textContent='느린 저장: '+(slow?'켬':'끔');$('qa-delay').setAttribute('aria-pressed',String(slow));$('qa-fail-next').setAttribute('aria-pressed',String(failNext));$('qa-status').textContent=failNext?'다음 저장 1회 실패':slow?'저장 응답 0.9초 지연':'정상 저장';}
+$('qa-delay').onclick=()=>{if(!saving){slow=!slow;updateScenario();}};
+$('qa-fail-next').onclick=()=>{if(!saving){failNext=!failNext;updateScenario();}};
+for(const name of ['all','active','archived','low'])$('filter-'+name).onclick=()=>{filter=name;page=1;list();};
+$('sort-price').onclick=()=>{sortPrice=!sortPrice;page=1;$('sort-price').setAttribute('aria-pressed',String(sortPrice));list();};
+$('page-prev').onclick=()=>{page--;list();};$('page-next').onclick=()=>{page++;list();};
+$('stock-form').addEventListener('submit',async event=>{
+ event.preventDefault();if(saving)return;const value=$('stock-value').value.trim();
+ if(invalid('stock-value',!/^\d+$/.test(value)||Number(value)>9999?'재고는 0~9,999의 정수로 입력하세요.':''))return;
+ const items=load(),item=items.find(p=>p.id===detailId);if(!item)return;item.stock=Number(value);setBusy('stock-form',true);
+ try{await persist(items);detail();$('detail-message').textContent='재고를 '+value+'개로 변경했습니다.';}catch(error){invalid('stock-value',error.message);}finally{setBusy('stock-form',false);}
+});
+$('resume-product').onclick=async()=>{
+ if(saving)return;const items=load(),item=items.find(p=>p.id===detailId);if(!item||item.status!=='archived')return;
+ item.status='active';saving=true;$('resume-product').disabled=true;
+ try{await persist(items);detail();$('detail-message').textContent='판매를 재개했습니다.';}catch(error){$('detail-message').textContent=error.message;}finally{saving=false;$('resume-product').disabled=false;}
+};
+window.addEventListener('beforeunload',event=>{if(dirty||saving){event.preventDefault();event.returnValue='';}});
+
+show();
+
+</script>
+</body>
+</html>
