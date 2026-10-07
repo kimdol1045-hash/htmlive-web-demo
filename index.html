@@ -114,16 +114,16 @@ $('archive-product').addEventListener('click',()=>{$('archive-error').hidden=tru
 $('cancel-archive').addEventListener('click',()=>$('archive-dialog').close());
 $('confirm-archive').addEventListener('click',async()=>{
  if(saving)return;const items=load(),item=items.find(p=>p.id===detailId);if(!item||item.status!=='active')return;
- item.status='archived';setBusy('archive-dialog',true);
+ item.status='archived';setBusy('archive-dialog',true);$('confirm-archive').textContent='저장 중…';
  try{await persist(items);$('archive-dialog').close();detail();$('detail-message').textContent='판매를 중지했습니다. 상품과 재고는 유지됩니다.';}
  catch(error){$('archive-error').textContent=error.message;$('archive-error').hidden=false;}
- finally{setBusy('archive-dialog',false);}
+ finally{setBusy('archive-dialog',false);$('confirm-archive').textContent='판매 중지 확정';}
 });
 function setBusy(id,value){saving=value;$(id).setAttribute('aria-busy',String(value));for(const el of $(id).querySelectorAll('button,input,select,textarea'))el.disabled=value;}
 async function persist(items){
  await new Promise(resolve=>setTimeout(resolve,slow?900:80));
  if(failNext){failNext=false;updateScenario();throw new Error('테스트 조건에 따라 저장에 실패했습니다. 입력은 유지됩니다. 다시 저장하세요.');}
- try{save(items);}catch{throw new Error('브라우저 저장소에 저장하지 못했습니다. 설정을 확인하고 다시 시도하세요.');}
+ try{save(items);}catch{throw new Error('저장할 수 없습니다. 브라우저의 저장소 설정을 확인하세요.');}
 }
 function updateScenario(){$('qa-delay').textContent='느린 저장: '+(slow?'켬':'끔');$('qa-delay').setAttribute('aria-pressed',String(slow));$('qa-fail-next').setAttribute('aria-pressed',String(failNext));$('qa-status').textContent=failNext?'다음 저장 1회 실패':slow?'저장 응답 0.9초 지연':'정상 저장';}
 $('qa-delay').onclick=()=>{if(!saving){slow=!slow;updateScenario();}};
@@ -134,8 +134,8 @@ $('page-prev').onclick=()=>{page--;list();};$('page-next').onclick=()=>{page++;l
 $('stock-form').addEventListener('submit',async event=>{
  event.preventDefault();if(saving)return;const value=$('stock-value').value.trim();
  if(invalid('stock-value',!/^\d+$/.test(value)||Number(value)>9999?'재고는 0~9,999의 정수로 입력하세요.':''))return;
- const items=load(),item=items.find(p=>p.id===detailId);if(!item)return;item.stock=Number(value);setBusy('stock-form',true);
- try{await persist(items);detail();$('detail-message').textContent='재고를 '+value+'개로 변경했습니다.';}catch(error){invalid('stock-value',error.message);}finally{setBusy('stock-form',false);}
+ const items=load(),item=items.find(p=>p.id===detailId);if(!item)return;item.stock=Number(value);setBusy('stock-form',true);$('save-stock').textContent='저장 중…';
+ try{await persist(items);detail();$('detail-message').textContent='재고를 '+value+'개로 변경했습니다.';}catch(error){invalid('stock-value',error.message);}finally{setBusy('stock-form',false);$('save-stock').textContent='재고 저장';}
 });
 $('resume-product').onclick=async()=>{
  if(saving)return;const items=load(),item=items.find(p=>p.id===detailId);if(!item||item.status!=='archived')return;
